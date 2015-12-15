@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schema targetNamespace="http://cs548.stevens.edu/clinic/dto"
+	elementFormDefault="unqualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://cs548.stevens.edu/clinic/dto"
+	attributeFormDefault="unqualified">
+
+	<element name="patient-dto">
+		<complexType>
+			<sequence>
+				<element name="id" type="long" />
+				<element name="patient-id" type="long" />
+				<element name="name" type="string" />
+				<element name="dob" type="date" />
+				<element name="age" type="int" />
+				<element name="treatments" type="long" nillable="true"
+					minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="treatment-dto">
+		<complexType>
+			<sequence>
+				<element name="id" type="long"/>
+				<element name="diagnosis" type="string"/>
+				<element name="patient" type="long"/>
+				<element name="provider" type="long"/>
+				<!-- Use choice element to add treatment-specific information -->
+				<!-- Define complex types for treatment types below. -->
+				 <choice>
+                        <element name="Drug_Treatment" type="tns:DrugType"/>
+                        <element maxOccurs="1" name="Radiology_Treatment" type="tns:RadiologyType"/>
+                        <element maxOccurs="1" name="Surgery_Treatment" type="tns:SurgeryType"/>
+                  </choice>
+			</sequence>
+		</complexType>
+	</element>
+	
+	<element name="provider-dto">
+		<complexType>
+			<sequence>
+			<element name="provider-Id" type="long"></element>
+			<element name="npi" type="string"></element>
+			<element name="name" type="string"></element>
+			<element name="specialization" type="string"></element>
+			<element name="treatments" type="long" nillable="true"
+					minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+	
+	
+	<complexType name="DrugType">
+        <sequence>
+            <element form="qualified" name="ID" type="long"/>
+            <element form="qualified" name="Drug_name" type="string"/>
+           
+            <element minOccurs="1" name="Dosage" type="float"/>
+            <element name="Physicain_name"/>
+        </sequence>
+    </complexType>
+    
+    <complexType name="SurgeryType">
+        <sequence>
+            <element name="ID" type="long" form="qualified"/>
+            <element name="surgeon_name" type="string"/>
+            <element form="qualified" name="date_of_surgery" type="date"/>
+        </sequence>
+    </complexType>
+    
+    <complexType name="RadiologyType">
+        <sequence>
+            <element name="ID" type="long" form="qualified"/>
+            <element name="radiologist_name" type="string"/>
+            <element maxOccurs="unbounded" minOccurs="1" name="treatment_dates" type="date">
+             </element>
+        </sequence>
+    </complexType>
+
+</schema>
+
